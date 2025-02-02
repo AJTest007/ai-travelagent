@@ -10,6 +10,11 @@ def get_travel_plan(groq_api_key, serpapi_key, destination, duration, budget, tr
     os.environ["GROQ_API_KEY"] = groq_api_key
     os.environ["SERP_API_KEY"] = serpapi_key
     
+    travel_agent = Agent(
+        name="Travel Planner",
+        model=Groq(id="llama-3.3-70b-versatile"),
+        tools=[SerpApiTools()],
+        instructions=[
             "You are a travel planning assistant using Groq Llama.",
             "Help users plan their trips by researching destinations, finding attractions, suggesting accommodations, and providing transportation options.",
             "Give relevant live links of places and hotels by searching on the internet.",
@@ -20,6 +25,16 @@ def get_travel_plan(groq_api_key, serpapi_key, destination, duration, budget, tr
     )
     
     prompt = f"""Create a comprehensive travel plan for {destination} for {duration} days.
+
+    Travel Preferences:
+    - Budget Level: {budget}
+    - Travel Styles: {', '.join(travel_style)}
+
+    Please provide a detailed itinerary that includes:
+    
+    1. Best Time to Visit
+    2. Accommodation Recommendations
+    3. Day-by-Day Itinerary
     4. Culinary Experiences
     5. Practical Travel Tips
     6. Estimated Total Trip Cost
