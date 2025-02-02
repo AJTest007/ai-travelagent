@@ -6,7 +6,7 @@ from phi.tools.serpapi_tools import SerpApiTools
 
 # Initialize page config
 st.set_page_config(
-    page_title="AI Travel Planner",
+    page_title="Escapade AI - Your Bespoke Travel Planner",
     page_icon="🌎",
     layout="wide",
     initial_sidebar_state="expanded"
