@@ -138,7 +138,7 @@ try:
     )
 
     # Main UI
-    st.title("🌎 AI Travel Planner")
+    st.title("🌎 Escapade AI - Travel Planner")
     
     st.markdown(f"""
         <div class="travel-summary">
