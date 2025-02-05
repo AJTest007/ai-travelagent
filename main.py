@@ -1,6 +1,9 @@
 import streamlit as st
 import os
-from pypdf import PdfReader
+import pdfkit
+from fpdf import FPDF
+from io import BytesIO
+
 from phi.agent import Agent
 from phi.model.groq import Groq  # Assuming this is how you import Groq Llama
 from phi.tools.serpapi_tools import SerpApiTools
@@ -252,35 +255,31 @@ try:
 except Exception as e:
     st.error(f"Application Error: {str(e)}")
 
+
 # Export to PDF
+col1, col2 = st.columns([1, 1])
+with col1:
+    if st.button("Generate Travel Plan"):
+        # Your existing code for generating travel plan
+with col2:
     if st.button("Export to PDF"):
         if st.session_state.travel_plan:
             try:
-                html = f"""
-                <html>
-                <body>
-                <h1>Escapade AI Travel Plan</h1>
-                {st.session_state.travel_plan}
-                </body>
-                </html>
-                """
-                options = {
-                    'page-size': 'Letter',
-                    'margin-top': '0.75in',
-                    'margin-right': '0.75in',
-                    'margin-bottom': '0.75in',
-                    'margin-left': '0.75in',
-                    'encoding': "UTF-8",
-                    'custom-header': [
-                        ('Accept-Encoding', 'gzip')
-                    ]
-                }
-                pdfkit.from_string(html, "travel_plan.pdf", options=options)
-                st.success("PDF exported successfully!")
+                pdf = FPDF()
+                pdf.add_page()
+                pdf.set_font("Arial", size = 15)
+                for line in st.session_state.travel_plan.split('\n'):
+                    pdf.cell(200, 10, txt = line, ln = True, align = 'L')
+                binary_pdf = BytesIO()
+                pdf.output("travel_plan.pdf", "F").encode("latin-1")
+                binary_pdf = BytesIO(pdf.output(dest='S'))
+                st.download_button(
+                    label="Download PDF",
+                    data=binary_pdf,
+                    file_name="travel_plan.pdf",
+                    mime="application/octet-stream"
+                )
             except Exception as e:
                 st.error(f"Failed to export to PDF: {str(e)}")
         else:
             st.warning("Please generate a travel plan first before exporting to PDF.")
-
-except Exception as e:
-    st.error(f"Application Error: {str(e)}")
