@@ -259,27 +259,27 @@ except Exception as e:
 # Export to PDF
 col1, col2 = st.columns([1, 1])
 with col1:
-    if st.button("Generate Travel Plan"):
+     if st.button("Generate Travel Plan"):
         # Your existing code for generating travel plan
-with col2:
-    if st.button("Export to PDF"):
-        if st.session_state.travel_plan:
-            try:
-                pdf = FPDF()
-                pdf.add_page()
-                pdf.set_font("Arial", size = 15)
-                for line in st.session_state.travel_plan.split('\n'):
-                    pdf.cell(200, 10, txt = line, ln = True, align = 'L')
-                binary_pdf = BytesIO()
-                pdf.output("travel_plan.pdf", "F").encode("latin-1")
-                binary_pdf = BytesIO(pdf.output(dest='S'))
-                st.download_button(
-                    label="Download PDF",
-                    data=binary_pdf,
-                    file_name="travel_plan.pdf",
-                    mime="application/octet-stream"
-                )
-            except Exception as e:
-                st.error(f"Failed to export to PDF: {str(e)}")
-        else:
-            st.warning("Please generate a travel plan first before exporting to PDF.")
+            with col2:
+                if st.button("Export to PDF"):
+                    if st.session_state.travel_plan:
+                        try:
+                            pdf = FPDF()
+                            pdf.add_page()
+                            pdf.set_font("Arial", size = 15)
+                            for line in st.session_state.travel_plan.split('\n'):
+                                pdf.cell(200, 10, txt = line, ln = True, align = 'L')
+                            binary_pdf = BytesIO()
+                            pdf.output("travel_plan.pdf", "F").encode("latin-1")
+                            binary_pdf = BytesIO(pdf.output(dest='S'))
+                            st.download_button(
+                                label="Download PDF",
+                                data=binary_pdf,
+                                file_name="travel_plan.pdf",
+                                mime="application/octet-stream"
+                            )
+                        except Exception as e:
+                            st.error(f"Failed to export to PDF: {str(e)}")
+                    else:
+                        st.warning("Please generate a travel plan first before exporting to PDF.")
