@@ -1,9 +1,5 @@
 import streamlit as st
 import os
-import pdfkit
-from fpdf import FPDF
-from io import BytesIO
-
 from phi.agent import Agent
 from phi.model.groq import Groq  # Assuming this is how you import Groq Llama
 from phi.tools.serpapi_tools import SerpApiTools
@@ -256,17 +252,3 @@ except Exception as e:
     st.error(f"Application Error: {str(e)}")
 
 
-# Export to PDF
-# After generating the travel plan and before the Q&A section
-    if st.session_state.travel_plan:
-        st.divider()
-        st.subheader("💾 Save Your Travel Plan")
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.download_button(
-                label="📄 Download Travel Plan",
-                data=st.session_state.travel_plan.encode('utf-8'),
-                file_name=f"travel_plan_{destination.replace(' ', '_')}.txt",
-                mime="text/plain",
-                key="download_button"
-            )
