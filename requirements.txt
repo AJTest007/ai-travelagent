@@ -2,5 +2,5 @@ streamlit
 google-search-results
 phidata
 groq
-pypdf
+fpdf
 pdfkit
