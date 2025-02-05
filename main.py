@@ -1,8 +1,10 @@
 import streamlit as st
 import os
+from pypdf import PdfReader
 from phi.agent import Agent
 from phi.model.groq import Groq  # Assuming this is how you import Groq Llama
 from phi.tools.serpapi_tools import SerpApiTools
+
 
 # Initialize page config
 st.set_page_config(
@@ -246,6 +248,39 @@ try:
                 st.warning("Please generate a travel plan first before asking questions.")
             else:
                 st.warning("Please enter a question")
+
+except Exception as e:
+    st.error(f"Application Error: {str(e)}")
+
+# Export to PDF
+    if st.button("Export to PDF"):
+        if st.session_state.travel_plan:
+            try:
+                html = f"""
+                <html>
+                <body>
+                <h1>Escapade AI Travel Plan</h1>
+                {st.session_state.travel_plan}
+                </body>
+                </html>
+                """
+                options = {
+                    'page-size': 'Letter',
+                    'margin-top': '0.75in',
+                    'margin-right': '0.75in',
+                    'margin-bottom': '0.75in',
+                    'margin-left': '0.75in',
+                    'encoding': "UTF-8",
+                    'custom-header': [
+                        ('Accept-Encoding', 'gzip')
+                    ]
+                }
+                pdfkit.from_string(html, "travel_plan.pdf", options=options)
+                st.success("PDF exported successfully!")
+            except Exception as e:
+                st.error(f"Failed to export to PDF: {str(e)}")
+        else:
+            st.warning("Please generate a travel plan first before exporting to PDF.")
 
 except Exception as e:
     st.error(f"Application Error: {str(e)}")
